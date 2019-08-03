@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -6,13 +6,13 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-import {shouldUpdate} from '../../../component-updater';
+import { shouldUpdate } from '../../../component-updater';
 
 import styleConstructor from './style';
 
 class Day extends Component {
   static displayName = 'IGNORE';
-  
+
   static propTypes = {
     // TODO: disabled props should be removed
     state: PropTypes.oneOf(['disabled', 'today', '']),
@@ -50,10 +50,13 @@ class Day extends Component {
       // Filter out dots so that we we process only those items which have key and color property
       const validDots = marking.dots.filter(d => (d && d.color));
       return validDots.map((dot, index) => {
-        return (
-          <View key={dot.key ? dot.key : index} style={[baseDotStyle,
-            { backgroundColor: marking.selected && dot.selectedDotColor ? dot.selectedDotColor : dot.color}]}/>
-        );
+        if (index <= 2) {
+          return (
+             <Text allowFontScaling={false} numberOfLines={1} ellipsizeMode="tail" style={{ borderColor: '#e5e6e9',
+             borderWidth: 1,
+             borderRadius: 3,marginLeft:12,marginRight:12,marginTop:2, padding:1, fontSize: 8, textAlign: 'center', color: marking.selected && dot.selectedDotColor ? dot.selectedDotColor : dot.color }}>{String(dot.key)}</Text> 
+          );
+        }
       });
     }
     return;
@@ -70,7 +73,7 @@ class Day extends Component {
       containerStyle.push(this.style.selected);
       textStyle.push(this.style.selectedText);
       if (marking.selectedColor) {
-        containerStyle.push({backgroundColor: marking.selectedColor});
+        containerStyle.push({ backgroundColor: marking.selectedColor });
       }
     } else if (typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled') {
       textStyle.push(this.style.disabledText);
@@ -85,7 +88,7 @@ class Day extends Component {
         onPress={this.onDayPress}
         onLongPress={this.onDayLongPress}>
         <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
-        <View style={{flexDirection: 'row'}}>{dot}</View>
+        <View style={{ flexDirection: 'column' }}>{dot}</View>
       </TouchableOpacity>
     );
   }
